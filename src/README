@@ -1,0 +1,91 @@
+===============================================
+          C A N D U M P   P A R S E R
+===============================================
+
+Hastily and haphazardly written over a few hours
+on the weekend, this is a very simple program with
+one intention: to save you the slew of grep
+commands and terminal scrolling you would need to
+locate specific candump records.
+
+Now I know what you're thinking "Isn't this like,
+a fairly specific thing?  Isn't there an easier
+way?"  After writing a communication profile for
+CANopen, I can see that even adding a few items
+to the CAN line could end up producing thousands
+of unwanted messages.  "But we wanted all of them!"
+Well, of course you do!  When everything is going
+well...  On that day when the sh!t hits the fan
+and your boss is asking you what the hell happened
+to the system the just crashed and burned because
+a motor thought that it was supposed to go 3000
+RPMs instead of 3, you'll want to be able to
+analyze as quickly as possible.  Now I haven't
+arrived at that day, but when I do you'd better bet
+that I'll be the fastest analyzer in the West!
+
+What is candump?
+
+This tool is married to the standard linux
+can-utils (specifically candump) that you can find
+here:
+
+https://github.com/linux-can/can-utils
+
+If you can muster together an extra processor and
+attach that to your CAN line, you can get some
+wonderfully helpful insight into what you're
+systems are saying.
+
+This tool specifically parses the following types
+of lines:
+
+ port cob-id [#] XX XX XX XX XX XX XX XX
+
+or
+
+ (XXXXXX) port cob-id [#] XX XX XX XX XX XX XX XX
+
+Where X is "don't care"
+
+This aligns with the typical output of the candump
+utility considering both the standard output and
+the output with a timestamp prepended.
+
+Example line:
+
+ (000.000253)  can0  67F  [8] 23 83 60 00 3B D9 02 00
+
+This tool is not particularly resource friendly.
+I didn't take the time to optimize and I leant
+fully on Qt to hand all the heavy lifting rather
+than using homebrew functions.
+
+How to use:
+
+0.  Get your dump!  This can be acheived, as mentioned
+    before, by attaching a processor capable of running
+    a linux distro and running something to the following
+    effect:
+
+    candump can0 2>&1 | tee sample.txt
+
+    This is, of course, considering that you configured
+    your CAN port and named it can0.
+
+1.  Download your sample.txt from the processor
+
+    scp uname@ip_addr:/path/to/dump /local/path
+
+2.  Open the CanDumpDisplay
+
+3.  Load the file
+
+4.  Use the built in functionality to extract necessary
+    lines.
+
+5.  Review
+
+6.  Attempt to debug
+
+7.  Repeat steps 0 through 6 until step 6 is successful.
